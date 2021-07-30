@@ -1,0 +1,69 @@
+definitions:
+  handler.Beer:
+    properties:
+      description:
+        type: string
+      graduation:
+        type: number
+      name:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /addbeer:
+    post:
+      consumes:
+      - application/json
+      description: AddBeer to catalogue
+      parameters:
+      - description: beer
+        in: body
+        name: beer
+        required: true
+        schema:
+          $ref: '#/definitions/handler.Beer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: AddBeer
+  /beer/{name}:
+    get:
+      consumes:
+      - application/json
+      description: GetBeer from catalogue
+      parameters:
+      - description: name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Beer'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: GetBeer
+swagger: "2.0"
