@@ -1,0 +1,26 @@
+version: "3.3"
+services: 
+    server:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        env_file: .env
+        depends_on: 
+            - database
+        networks: 
+            - default
+        ports: 
+            - "3001:3001"
+    database:
+        image: postgres
+        container_name: postgres-docker
+        restart: always
+        env_file: 
+            - .env
+        ports: 
+            - "5433:5432"
+        volumes: 
+            - ./initdb/initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
+        
+volumes:
+    postgres:

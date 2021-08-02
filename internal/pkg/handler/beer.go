@@ -25,6 +25,11 @@ type Beer struct {
 	Graduation  float32 `json:"graduation"`
 }
 
+const (
+	INSERTQUERY = `insert into public.beer (beer_name, description, graduation) values ($1, $2, $3)`
+	SELECTQUERY = `select * from public.beer where beer_name = $1`
+)
+
 // AddBeer godoc
 // @Summary AddBeer
 // @Description AddBeer to catalogue
@@ -47,8 +52,8 @@ func AddBeer(c echo.Context) error {
 		log.Println(err)
 		return c.String(http.StatusInternalServerError, fmt.Sprintf("something went wrong unmarshalling the Beer data. %s", err))
 	}
-	qry := `insert into public.beer (beer_name, description, graduation) values ($1, $2, $3)`
-	_, e := Pool.Exec(context.Background(), qry, strings.ToUpper(b.Name), b.Description, b.Graduation)
+
+	_, e := Pool.Exec(context.Background(), INSERTQUERY, strings.ToUpper(b.Name), b.Description, b.Graduation)
 	if e != nil {
 		log.Printf("beer %s already in the DB. %s", b.Name, e)
 		return c.String(http.StatusBadRequest, fmt.Sprintf("beer %s already in the DB. %s", b.Name, e))
@@ -75,9 +80,8 @@ func GetBeer(c echo.Context) error {
 		return err
 	}
 	beername := c.Param("name")
-	qry := `select * from public.beer where beer_name = $1`
 
-	row, e := Pool.Query(context.Background(), qry, strings.ToUpper(beername))
+	row, e := Pool.Query(context.Background(), SELECTQUERY, strings.ToUpper(beername))
 	if e != nil {
 		log.Printf("beer %s is not in the DB. %s", beername, e)
 		return c.String(http.StatusBadRequest, fmt.Sprintf("beer %s is not in the DB. %s", beername, e))

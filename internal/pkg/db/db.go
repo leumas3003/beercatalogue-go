@@ -16,10 +16,10 @@ func Db() (*pgxpool.Pool, error) {
 	cs := "host='%v' user='%v' password='%v' dbname='%v'"
 
 	connectionString := fmt.Sprintf(cs,
-		"localhost",
-		"samuelmartel",
-		"",
-		"samuelmartel",
+		"database",
+		"docker",
+		"docker",
+		"docker",
 	)
 	//pgxpool.ParseConfig(os.Getenv("DATABASE_URL"))
 	fmt.Printf("Using DB Connection String [%s] \n", connectionString)
